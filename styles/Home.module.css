@@ -75,21 +75,50 @@
 
 .card {
   margin: 1rem;
-  padding: 1.5rem;
-  text-align: left;
-  color: inherit;
+  padding: 0;
+  width: 30rem;
+  height: 20rem;
+  text-align: center;
+  color: white;
   text-decoration: none;
-  border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 300px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.card Image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  /* Ensures the image stays in the background */
+}
+
+.cardContent {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 1));
+  /* Gradient overlay */
+  padding: 1.5rem;
+  /* Padding for content */
 }
 
 .card:hover,
 .card:focus,
 .card:active {
   color: #0070f3;
-  border-color: #0070f3;
 }
 
 .card h2 {

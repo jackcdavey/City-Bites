@@ -3,7 +3,39 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
+interface City {
+  name: string;
+  image: string;
+}
+
 export default function Home() {
+
+  const cities: City[] = [
+    {
+      name: "San Francisco",
+      image: "/images/sanfrancisco.webp"
+    },
+    {
+      name: "San Jose",
+      image: "/images/sanjose.webp"
+    },
+    {
+      name: "San Diego",
+      image: "/images/sandiego.webp"
+    },
+    {
+      name: "Los Angeles",
+      image: "/images/losangeles.webp"
+    },
+    {
+      name: "New York",
+      image: "/images/newyork.webp"
+    }
+
+
+  ]
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -22,35 +54,17 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <Link href="/businesses" className={styles.card}> { /* Will need to be updated with individual city routes */}
 
-            <h2>San Francisco</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </Link>
-
-          <Link href="/businesses" className={styles.card}> { /* Will need to be updated with individual city routes */}
-
-            <h2>San Jose</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </Link>
-
-          <Link href="/businesses" className={styles.card}> { /* Will need to be updated with individual city routes */}
-
-            <h2>San Diego</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </Link>
-
-          <Link href="/businesses" className={styles.card}> { /* Will need to be updated with individual city routes */}
-
-            <h2>Los Angeles</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </Link>
-
-          <Link href="/businesses" className={styles.card}> { /* Will need to be updated with individual city routes */}
-
-            <h2>Seattle</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </Link>
+          {cities.map((city) => (
+            <Link href="/businesses" key={city.name}>
+              <div className={styles.card} style={{ backgroundImage: `url(${city.image})` }}>
+                <div className={styles.cardContent}>
+                  <h2>{city.name}</h2>
+                  {/* <p>Find in-depth information about Next.js features and API.</p> */}
+                </div>
+              </div>
+            </Link>
+          ))}
 
 
         </div>

@@ -3,8 +3,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+    const router = useRouter();
+    const query = router.query;
+    const city = query.city;
+
     return (
         <div className={styles.container}>
             <Head>
@@ -19,7 +24,7 @@ export default function Home() {
                 </p>
 
                 <h1 className={styles.title}>
-                    City Name
+                    {city}
                 </h1>
 
 

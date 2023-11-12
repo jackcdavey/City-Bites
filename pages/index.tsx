@@ -56,7 +56,12 @@ export default function Home() {
         <div className={styles.grid}>
 
           {cities.map((city) => (
-            <Link href="/businesses" key={city.name}>
+            <Link
+              href={{
+                pathname: "/businesses",
+                query: { city: city.name }
+              }}
+              key={city.name}>
               <div className={styles.card} style={{ backgroundImage: `url(${city.image})` }}>
                 <div className={styles.cardContent}>
                   <h2>{city.name}</h2>

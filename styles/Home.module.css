@@ -82,7 +82,7 @@
   color: white;
   text-decoration: none;
   border-radius: 10px;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: box-shadow 0.3s ease, color 0.3s ease, transform 0.3s ease;
   max-width: 300px;
   background-size: cover;
   background-position: center;
@@ -111,16 +111,15 @@
   flex-direction: column;
   justify-content: flex-end;
   background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 1));
-  /* Gradient overlay */
-  padding: 1.5rem;
-  /* Padding for content */
+  padding: 1rem;
 }
 
 .card:hover,
 .card:focus,
 .card:active {
   color: #0070f3;
-  box-shadow: 0 0 0 0.2rem #0070f3;
+  box-shadow: 0 0 3rem #0070f3 !important;
+  transform: scale(1.05);
 }
 
 .card h2 {

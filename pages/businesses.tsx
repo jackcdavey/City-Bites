@@ -5,10 +5,50 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+interface Restaurant {
+    name: string;
+    image: string;
+    rating: number;
+    liked: boolean;
+}
+
 export default function Home() {
     const router = useRouter();
     const query = router.query;
     const city = query.city;
+
+    const restaurants: Restaurant[] = [
+        {
+            name: "Restaurant 1",
+            image: "/images/sanfrancisco.webp",
+            rating: 5,
+            liked: true
+        },
+        {
+            name: "Restaurant 2",
+            image: "/images/sanjose.webp",
+            rating: 3.5,
+            liked: true
+        },
+        {
+            name: "Restaurant 3",
+            image: "/images/sandiego.webp",
+            rating: 5,
+            liked: false
+        },
+        {
+            name: "Restaurant 4",
+            image: "/images/losangeles.webp",
+            rating: 4,
+            liked: false
+        },
+        {
+            name: "Restaurant 5",
+            image: "/images/newyork.webp",
+            rating: 5,
+            liked: false
+        }
+    ]
 
     return (
         <div className={styles.container}>
@@ -30,17 +70,28 @@ export default function Home() {
 
 
                 <div className={styles.grid}>
-                    <Link href="/detail" className={styles.card}>
+                    {restaurants.map((restaurant) => (
+                        <Link
+                            href={{
+                                pathname: "/detail",
+                                query: { restaurant: restaurant.name }
+                            }}
+                            key={restaurant.name}
+                        >
+                            <div
+                                className={styles.card}
+                                style={{
+                                    backgroundImage: `url(${restaurant.image})`,
+                                    boxShadow: restaurant.liked ? "0 0 3rem green" : "none"
 
-                        <h2>Restaurant 1</h2>
-                        <p>Rating Here</p>
-                    </Link>
-                    <Link href="/detail" className={styles.card}>
-
-                        <h2>Restaurant 2</h2>
-                        <p>Rating Here</p>
-                    </Link>
-
+                                }}>
+                                <div className={styles.cardContent}>
+                                    <h3>{restaurant.name}</h3>
+                                    <p>{restaurant.rating}</p>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
 
 
 

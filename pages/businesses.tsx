@@ -4,6 +4,8 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react';
+import { GetStaticProps } from 'next'
 
 interface Restaurant {
     name: string;
@@ -12,43 +14,24 @@ interface Restaurant {
     liked: boolean;
 }
 
-export default function Home() {
+export default function Businesses() {
     const router = useRouter();
     const query = router.query;
     const city = query.city;
+    const [restaurants, setRestaurants] = useState([]);
 
-    const restaurants: Restaurant[] = [
-        {
-            name: "Restaurant 1",
-            image: "/images/sanfrancisco.webp",
-            rating: 5,
-            liked: true
-        },
-        {
-            name: "Restaurant 2",
-            image: "/images/sanjose.webp",
-            rating: 3.5,
-            liked: true
-        },
-        {
-            name: "Restaurant 3",
-            image: "/images/sandiego.webp",
-            rating: 5,
-            liked: false
-        },
-        {
-            name: "Restaurant 4",
-            image: "/images/losangeles.webp",
-            rating: 4,
-            liked: false
-        },
-        {
-            name: "Restaurant 5",
-            image: "/images/newyork.webp",
-            rating: 5,
-            liked: false
+    const searchRestaurants = async () => {
+        const response = await fetch(`/api/yelp?city=${city}`);
+        const data = await response.json();
+        setRestaurants(data.businesses);
+    };
+
+    useEffect(() => {
+        if (city) {
+            searchRestaurants();
         }
-    ]
+    }, [city]);
+
 
     return (
         <div className={styles.container}>
@@ -70,7 +53,7 @@ export default function Home() {
 
 
                 <div className={styles.grid}>
-                    {restaurants.map((restaurant) => (
+                    {restaurants && restaurants.length > 0 ? restaurants.map((restaurant) => (
                         <Link
                             href={{
                                 pathname: "/detail",
@@ -91,7 +74,9 @@ export default function Home() {
                                 </div>
                             </div>
                         </Link>
-                    ))}
+                    )) : (
+                        <h4>No restaurants found</h4>
+                    )}
 
 
 
@@ -113,3 +98,17 @@ export default function Home() {
         </div>
     )
 }
+
+// export async function getStaticProps() {
+//     const router = useRouter();
+//     const query = router.query;
+//     const city = query.city;
+//     const res = await fetch(`/api/yelp?city=${city}`);
+//     const data = await res.json();
+//     const restaurants = data.businesses;
+//     return {
+//         props: {
+//             restaurants
+//         }
+//     }
+// }

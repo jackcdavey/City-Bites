@@ -10,7 +10,8 @@ const Detail = () => {
     const router = useRouter();
     const restaurantId = router.query.restaurant;
     const [liked, setLiked] = useState(false);
-    const [restaurant, setRestaurant] = useState(null); // Initialize as null
+    const [restaurant, setRestaurant] = useState(null);
+    const [reviews, setReviews] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleLike = () => {
@@ -20,9 +21,15 @@ const Detail = () => {
     const getRestaurantDetail = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`/api/yelp?id=${restaurantId}`);
-            const data = await response.json();
-            setRestaurant(data); // Assuming data is the restaurant object
+            const detailResponse = await fetch(`/api/yelp?id=${restaurantId}`);
+            const details = await detailResponse.json();
+            const reviewResponse = await fetch(`/api/yelp/?id=${restaurantId}/reviews`);
+            const reviewList = await reviewResponse.json();
+            setRestaurant(details);
+            setReviews(reviewList.reviews);
+
+            console.log(restaurant.name);
+            console.log(reviews);
         } catch (error) {
             console.error("Error fetching restaurant:", error);
         } finally {
@@ -34,7 +41,7 @@ const Detail = () => {
         if (restaurantId) {
             getRestaurantDetail();
         }
-    }, [restaurantId]); // Update the dependency to restaurantId
+    }, [restaurantId]);
 
     return (
         <div className="detail-container">
@@ -52,7 +59,27 @@ const Detail = () => {
                             <button onClick={handleLike}>{liked ? 'Unlike' : 'Like'}</button>
                         </div>
                     </div>
-                    <div className="detail-review-row">
+                    <div className={styles.grid}>
+                        {
+                            reviews ? (
+                                reviews.map((review) => (
+                                    <a
+                                        href={review.url}
+                                        key={review.id}
+                                        target="_blank"
+                                        rel="noopener noreferrer" >
+                                        <div className={styles.card}>
+                                            <h3>{review.user.name}</h3>
+                                            <p>{review.text}</p>
+                                            <p>{review.rating}</p>
+
+                                        </div>
+                                    </a>
+                                ))
+                            ) : (
+                                <p>No reviews available.</p>
+                            )
+                        }
                         {/* {restaurant.reviews.map((review) => (
                             <ReviewCard key={review.id} review={review} />
                         ))} */}

@@ -64,7 +64,10 @@ export default function Businesses() {
                             <Link
                                 href={{
                                     pathname: "/detail",
-                                    query: { restaurant: restaurant.id }
+                                    query: {
+                                        restaurant: restaurant.id,
+                                        type: 'detail'
+                                    }
                                 }}
                                 key={restaurant.name}
                             >

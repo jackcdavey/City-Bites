@@ -1,7 +1,8 @@
 export default async (req, res) => {
   const city = req.query.city;
   const id = req.query.id;
-    const apiKey = process.env.YELP_API_KEY; 
+  const reviews = req.query.reviews;
+  const apiKey = process.env.YELP_API_KEY; 
 
     
     if (!apiKey) {
@@ -26,7 +27,7 @@ export default async (req, res) => {
     }
   }
   // Get details about a restaurant
-  else if (id) {
+  else if (id && !reviews) {
     try {
       const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/${id}`, {
         headers: {
@@ -40,5 +41,18 @@ export default async (req, res) => {
       res.status(500).json({ message: 'Error fetching data from Yelp' });
     }
 
+  } else if (reviews && id) {
+     try {
+      const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/${id}/reviews`, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      });
+
+      const data = await yelpResponse.json();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching reviews from Yelp' });
+    }
   }
 };

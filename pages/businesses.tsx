@@ -5,7 +5,6 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
-import { GetStaticProps } from 'next'
 
 interface Restaurant {
     name: string;
@@ -19,11 +18,20 @@ export default function Businesses() {
     const query = router.query;
     const city = query.city;
     const [restaurants, setRestaurants] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const searchRestaurants = async () => {
-        const response = await fetch(`/api/yelp?city=${city}`);
-        const data = await response.json();
-        setRestaurants(data.businesses);
+        setIsLoading(true);
+        try {
+            const response = await fetch(`/api/yelp?city=${city}`);
+            const data = await response.json();
+            setRestaurants(data.businesses);
+        } catch (error) {
+            console.error("Error fetching restaurants:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -53,30 +61,34 @@ export default function Businesses() {
 
 
                 <div className={styles.grid}>
-                    {restaurants && restaurants.length > 0 ? restaurants.map((restaurant) => (
-                        <Link
-                            href={{
-                                pathname: "/detail",
-                                query: { restaurant: restaurant.name }
-                            }}
-                            key={restaurant.name}
-                        >
-                            <div
-                                className={styles.card}
-                                style={{
-                                    backgroundImage: `url(${restaurant.image})`,
-                                    boxShadow: restaurant.liked ? "0 0 3rem green" : "none"
+                    {isLoading ? (
+                        <h4>Loading...</h4>
+                    ) :
 
-                                }}>
-                                <div className={styles.cardContent}>
-                                    <h3>{restaurant.name}</h3>
-                                    <p>{restaurant.rating}</p>
+                        restaurants && restaurants.length > 0 ? restaurants.map((restaurant) => (
+                            <Link
+                                href={{
+                                    pathname: "/detail",
+                                    query: { restaurant: restaurant.name }
+                                }}
+                                key={restaurant.name}
+                            >
+                                <div
+                                    className={styles.card}
+                                    style={{
+                                        backgroundImage: `url(${restaurant.image_url})`,
+                                        boxShadow: restaurant.liked ? "0 0 3rem green" : "none"
+
+                                    }}>
+                                    <div className={styles.cardContent}>
+                                        <h3>{restaurant.name}</h3>
+                                        <p>{restaurant.rating}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    )) : (
-                        <h4>No restaurants found</h4>
-                    )}
+                            </Link>
+                        )) : (
+                            <h4>No restaurants found</h4>
+                        )}
 
 
 
@@ -98,17 +110,3 @@ export default function Businesses() {
         </div>
     )
 }
-
-// export async function getStaticProps() {
-//     const router = useRouter();
-//     const query = router.query;
-//     const city = query.city;
-//     const res = await fetch(`/api/yelp?city=${city}`);
-//     const data = await res.json();
-//     const restaurants = data.businesses;
-//     return {
-//         props: {
-//             restaurants
-//         }
-//     }
-// }

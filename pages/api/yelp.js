@@ -1,9 +1,7 @@
 export default async (req, res) => {
-  const city = req.query.city;
+    const city = req.query.city;
     const apiKey = process.env.YELP_API_KEY; 
-    // const apiKey = "gBAMI5tIvgPrtpWudnwo1H2mjBL9-Siz4HjOMkgmtQTzckeeL4jAmtZWoPkHh-eIvn6rA4Fwh1-nUDIjc7JGkD6cHyo_YjFauk94pv7tSEqVC8EUr1wbbA3eYj8XZXYx";
 
-    console.log('api key', apiKey);
     
     if (!apiKey) {
   console.error('YELP_API_KEY is not defined in environment variables.');

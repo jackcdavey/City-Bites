@@ -14,7 +14,7 @@ export default async (req, res) => {
   // Search for top restaurants in a city
   if (city) {
     try {
-      const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/search?location=${city}&categories=restaurants&sort_by=rating&limit=10`, {
+      const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/search?location=${city}&categories=restaurants&sort_by=review_count&limit=10`, {
         headers: {
           Authorization: `Bearer ${apiKey}`,
         },

@@ -1,5 +1,6 @@
 export default async (req, res) => {
-    const city = req.query.city;
+  const city = req.query.city;
+  const id = req.query.id;
     const apiKey = process.env.YELP_API_KEY; 
 
     
@@ -9,17 +10,35 @@ export default async (req, res) => {
   return;
     }
     
+  // Search for top restaurants in a city
+  if (city) {
+    try {
+      const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/search?location=${city}&categories=restaurants&sort_by=rating&limit=10`, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      });
 
-  try {
-    const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/search?location=${city}&categories=restaurants&sort_by=rating&limit=10`, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
+      const data = await yelpResponse.json();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching data from Yelp' });
+    }
+  }
+  // Get details about a restaurant
+  else if (id) {
+    try {
+      const yelpResponse = await fetch(`https://api.yelp.com/v3/businesses/${id}`, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      });
 
-    const data = await yelpResponse.json();
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching data from Yelp' });
+      const data = await yelpResponse.json();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching data from Yelp' });
+    }
+
   }
 };

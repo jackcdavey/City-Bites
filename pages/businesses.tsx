@@ -6,12 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
 
-interface Restaurant {
-    name: string;
-    image: string;
-    rating: number;
-    liked: boolean;
-}
+
 
 export default function Businesses() {
     const router = useRouter();
@@ -69,7 +64,7 @@ export default function Businesses() {
                             <Link
                                 href={{
                                     pathname: "/detail",
-                                    query: { restaurant: restaurant.name }
+                                    query: { restaurant: restaurant.id }
                                 }}
                                 key={restaurant.name}
                             >

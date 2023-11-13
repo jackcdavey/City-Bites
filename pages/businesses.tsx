@@ -79,6 +79,7 @@ export default function Businesses() {
                                     }}>
                                     <div className={styles.cardContent}>
                                         <h3>{restaurant.name}</h3>
+                                        <h4>{restaurant.categories[0].title}</h4>
                                         <StarRating rating={restaurant.rating} />
                                     </div>
                                 </div>

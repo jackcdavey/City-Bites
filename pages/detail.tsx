@@ -71,7 +71,7 @@ const Detail = () => {
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                justifyContent: 'space-evenly',
+                                justifyContent: 'flex-start',
                             }}>
                                 <h1>{restaurant.name}</h1>
                                 <p>{restaurant.categories[0].title}</p>

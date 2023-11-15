@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css'
 import Head from 'next/head'
 import StarRating from '../components/StarRating.js';
+import { getOrCreateUserId } from '../utils/userSetup';
+
 
 
 const Detail = () => {
@@ -16,9 +18,32 @@ const Detail = () => {
     const [reviews, setReviews] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLike = () => {
+    const handleLike = async () => {
         setLiked(!liked);
+
+        const businessId = restaurantId;
+        const userId = getOrCreateUserId();
+
+        try {
+            const response = await fetch('/api/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ businessId, userId }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log(data.message); // Or update the UI accordingly
+            } else {
+                console.error(data.error);
+            }
+        } catch (error) {
+            console.error('Failed to like the business:', error);
+        }
     };
+
 
     const getRestaurantDetail = async () => {
         setIsLoading(true);
@@ -39,11 +64,34 @@ const Detail = () => {
         }
     };
 
+
+    const fetchLikedBusinesses = async (userId) => {
+        try {
+            const response = await fetch(`/api/getLikedBusinesses?userId=${userId}`);
+            const data = await response.json();
+            return data.likedBusinessIds;
+        } catch (error) {
+            console.error('Error fetching liked businesses:', error);
+            return [];
+        }
+    };
+
+
     useEffect(() => {
         if (restaurantId) {
             getRestaurantDetail();
         }
     }, [restaurantId]);
+
+    useEffect(() => {
+        const userId = getOrCreateUserId();
+        fetchLikedBusinesses(userId).then((likedBusinesses) => {
+            if (likedBusinesses.includes(restaurantId)) {
+                setLiked(true);
+            }
+        });
+    }, [restaurantId]);
+
 
     return (
         <div className={styles.container}>

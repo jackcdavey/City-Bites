@@ -65,7 +65,6 @@ export default function Home() {
               <div className={styles.card} style={{ backgroundImage: `url(${city.image})` }}>
                 <div className={styles.cardContent}>
                   <h2>{city.name}</h2>
-                  {/* <p>Find in-depth information about Next.js features and API.</p> */}
                 </div>
               </div>
             </Link>

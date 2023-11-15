@@ -1,0 +1,62 @@
+.container {
+    padding: 0 2rem;
+}
+
+.main {
+    min-height: 100vh;
+    padding: 4rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 80rem;
+}
+
+.detail {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+
+}
+
+.card {
+    margin: 1rem;
+    padding: 0;
+    width: 30rem;
+    height: 15rem;
+    text-align: center;
+    color: rgb(198, 198, 198);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    max-width: 300px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.review {
+    margin: 1rem;
+    padding: 0;
+    width: 20rem;
+    height: 15rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}

@@ -6,7 +6,7 @@ const BackButton = () => {
 
     return (
         <button className={styles.backButton} onClick={() => router.back()}>
-            Back
+            &#60; Back
         </button>
     );
 };

@@ -9,3 +9,9 @@
     padding: 10px 20px;
     cursor: pointer;
 }
+
+@media (prefers-color-scheme: dark) {
+    .backButton {
+        background-color: #333;
+    }
+}

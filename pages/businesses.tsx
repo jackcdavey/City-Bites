@@ -1,62 +1,57 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
 import StarRating from '../components/StarRating.js';
-import Link from 'next/link'
-import { useRouter } from 'next/router'
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { getOrCreateUserId } from '../utils/userSetup';
 import BackButton from '../components/BackButton';
 
-
 export default function Businesses() {
-    const router = useRouter();
-    const query = router.query;
-    const city = query.city;
-    const [restaurants, setRestaurants] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [likedBusinessIds, setLikedBusinessIds] = useState([]);
-    const [likedIdsFetched, setLikedIdsFetched] = useState(false);
-
-
+    const { query: { city } } = useRouter();
+    const [restaurantState, setRestaurantState] = useState({
+        isLoading: false,
+        data: [],
+    });
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (city) {
-                setIsLoading(true);
-                try {
-                    const userId = getOrCreateUserId();
-                    const restaurantResponse = await fetch(`/api/yelp?city=${city}`);
-                    const restaurantData = await restaurantResponse.json();
-                    const likesResponse = await fetch(`/api/get-likes?userId=${userId}`);
-                    const likesData = await likesResponse.json();
+        async function fetchData() {
+            if (!city) return;
 
-                    const updatedRestaurants = restaurantData.businesses.map(restaurant => ({
-                        ...restaurant,
-                        liked: likesData.likedBusinessIds.includes(restaurant.id),
-                    }));
+            setRestaurantState({ isLoading: true, data: [] });
 
-                    setRestaurants(updatedRestaurants);
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                } finally {
-                    setIsLoading(false);
-                }
+            try {
+                const userId = getOrCreateUserId();
+                const [restaurantResponse, likesResponse] = await Promise.all([
+                    fetch(`/api/yelp?city=${city}`),
+                    fetch(`/api/get-likes?userId=${userId}`),
+                ]);
+
+                const restaurantData = await restaurantResponse.json();
+                const likesData = await likesResponse.json();
+
+                const updatedRestaurants = restaurantData.businesses.map(restaurant => ({
+                    ...restaurant,
+                    liked: likesData.likedBusinessIds.includes(restaurant.id),
+                }));
+
+                setRestaurantState({ isLoading: false, data: updatedRestaurants });
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                setRestaurantState({ isLoading: false, data: [] });
             }
-        };
+        }
 
         fetchData();
     }, [city]);
 
-
-
-
+    const { isLoading, data: restaurants } = restaurantState;
 
     return (
         <div className={styles.container}>
             <Head>
                 <title>Restaurants: {city}</title>
-                <meta name="description" content={"A list of top restaurants in" + city} />
+                <meta name="description" content={`A list of top restaurants in ${city}`} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
@@ -67,11 +62,7 @@ export default function Businesses() {
                     Top Restaurants In...
                 </p>
 
-                <h1 className={styles.title}>
-                    {city}
-                </h1>
-
-
+                <h1 className={styles.title}>{city}</h1>
 
                 <div className={styles.grid}>
                     {isLoading ? (
@@ -101,12 +92,9 @@ export default function Businesses() {
                         <h4>No restaurants found</h4>
                     )}
                 </div>
-
             </main>
 
-            <footer className={styles.footer}>
-
-            </footer>
+            <footer className={styles.footer} />
         </div>
-    )
+    );
 }

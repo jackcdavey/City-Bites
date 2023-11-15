@@ -14,43 +14,39 @@ export default function Businesses() {
     const city = query.city;
     const [restaurants, setRestaurants] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [likedBusinessIds, setLikedBusinessIds] = useState([]);
+    const [likedIdsFetched, setLikedIdsFetched] = useState(false);
 
-    const searchRestaurants = async () => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(`/api/yelp?city=${city}`);
-            const data = await response.json();
-            setRestaurants(data.businesses);
-        } catch (error) {
-            console.error("Error fetching restaurants:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
-    const fetchLikedBusinesses = async (userId) => {
-        try {
-            const response = await fetch(`/api/get-likes?userId=${userId}`);
-            const data = await response.json();
-            return data.likedBusinessIds;
-        } catch (error) {
-            console.error('Error fetching liked businesses:', error);
-            return [];
-        }
-    };
 
     useEffect(() => {
-        if (city) {
-            searchRestaurants();
-        }
+        const fetchData = async () => {
+            if (city) {
+                setIsLoading(true);
+                try {
+                    const userId = getOrCreateUserId();
+                    const restaurantResponse = await fetch(`/api/yelp?city=${city}`);
+                    const restaurantData = await restaurantResponse.json();
+                    const likesResponse = await fetch(`/api/get-likes?userId=${userId}`);
+                    const likesData = await likesResponse.json();
+
+                    const updatedRestaurants = restaurantData.businesses.map(restaurant => ({
+                        ...restaurant,
+                        liked: likesData.likedBusinessIds.includes(restaurant.id),
+                    }));
+
+                    setRestaurants(updatedRestaurants);
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        fetchData();
     }, [city]);
 
-    useEffect(() => {
-        const userId = getOrCreateUserId();
-        fetchLikedBusinesses(userId).then((likedBusinesses) => {
-            console.log(likedBusinesses);
-        });
-    }, []);
 
 
 
@@ -77,39 +73,32 @@ export default function Businesses() {
                 <div className={styles.grid}>
                     {isLoading ? (
                         <h4>Loading...</h4>
-                    ) :
-
-                        restaurants && restaurants.length > 0 ? restaurants.map((restaurant) => (
-                            <Link
-                                href={{
-                                    pathname: "/detail",
-                                    query: {
-                                        restaurant: restaurant.id,
-                                    }
-                                }}
-                                key={restaurant.name}
-                            >
-                                <div
-                                    className={styles.card}
-                                    style={{
-                                        backgroundImage: `url(${restaurant.image_url})`,
-                                        boxShadow: restaurant.liked ? "0 0 3rem green" : "none"
-
-                                    }}>
-                                    <div className={styles.cardContent}>
-                                        <h3>{restaurant.name}</h3>
-                                        <h4>{restaurant.categories[0].title}</h4>
-                                        <StarRating rating={restaurant.rating} />
-                                    </div>
+                    ) : restaurants && restaurants.length > 0 ? restaurants.map((restaurant) => (
+                        <Link
+                            href={{
+                                pathname: "/detail",
+                                query: { restaurant: restaurant.id },
+                            }}
+                            key={restaurant.id}
+                        >
+                            <div
+                                className={styles.card}
+                                style={{
+                                    backgroundImage: `url(${restaurant.image_url})`,
+                                    boxShadow: restaurant.liked ? "0 0 3rem green" : "none"
+                                }}>
+                                <div className={styles.cardContent}>
+                                    <h3>{restaurant.name}</h3>
+                                    <h4>{restaurant.categories[0].title}</h4>
+                                    <StarRating rating={restaurant.rating} />
                                 </div>
-                            </Link>
-                        )) : (
-                            <h4>No restaurants found</h4>
-                        )}
-
-
-
+                            </div>
+                        </Link>
+                    )) : (
+                        <h4>No restaurants found</h4>
+                    )}
                 </div>
+
             </main>
 
             <footer className={styles.footer}>

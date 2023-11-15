@@ -5,7 +5,7 @@ import StarRating from '../components/StarRating.js';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
-
+import { getOrCreateUserId } from '../utils/userSetup';
 
 
 export default function Businesses() {
@@ -14,7 +14,6 @@ export default function Businesses() {
     const city = query.city;
     const [restaurants, setRestaurants] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
 
     const searchRestaurants = async () => {
         setIsLoading(true);
@@ -29,11 +28,31 @@ export default function Businesses() {
         }
     };
 
+    const fetchLikedBusinesses = async (userId) => {
+        try {
+            const response = await fetch(`/api/get-likes?userId=${userId}`);
+            const data = await response.json();
+            return data.likedBusinessIds;
+        } catch (error) {
+            console.error('Error fetching liked businesses:', error);
+            return [];
+        }
+    };
+
     useEffect(() => {
         if (city) {
             searchRestaurants();
         }
     }, [city]);
+
+    useEffect(() => {
+        const userId = getOrCreateUserId();
+        fetchLikedBusinesses(userId).then((likedBusinesses) => {
+            console.log(likedBusinesses);
+        });
+    }, []);
+
+
 
 
     return (

@@ -1,4 +1,3 @@
-import { Restaurant } from '../types';
 import ReviewCard from '../components/ReviewCard';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -19,30 +18,31 @@ const Detail = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleLike = async () => {
-        setLiked(!liked);
-
         const businessId = restaurantId;
         const userId = getOrCreateUserId();
 
         try {
-            const response = await fetch('/api/like', {
-                method: 'POST',
+            const method = liked ? 'DELETE' : 'POST';
+            const url = liked ? '/api/unlike' : '/api/like';
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ businessId, userId }),
             });
 
-            const data = await response.json();
             if (response.ok) {
-                console.log(data.message); // Or update the UI accordingly
+                setLiked(!liked);
             } else {
+                const data = await response.json();
                 console.error(data.error);
             }
         } catch (error) {
-            console.error('Failed to like the business:', error);
+            console.error('Failed to update like status:', error);
         }
     };
+
 
 
     const getRestaurantDetail = async () => {
@@ -67,7 +67,7 @@ const Detail = () => {
 
     const fetchLikedBusinesses = async (userId) => {
         try {
-            const response = await fetch(`/api/getLikedBusinesses?userId=${userId}`);
+            const response = await fetch(`/api/get-likes?userId=${userId}`);
             const data = await response.json();
             return data.likedBusinessIds;
         } catch (error) {

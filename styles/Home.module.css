@@ -118,7 +118,6 @@
 .card:focus,
 .card:active {
   color: #ffffff;
-  box-shadow: 0 0 3rem #0070f3 !important;
   transform: scale(1.05);
 }
 

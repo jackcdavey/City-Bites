@@ -91,7 +91,7 @@ const Detail = () => {
                             }}>
                                 <h1>{restaurant.name}</h1>
                                 <h3>{restaurant.categories[0].title}</h3>
-                                <p>{restaurant.location.address1}, {restaurant.location.city}  {restaurant.location.zip_code}</p>
+                                <p style={{ fontStyle: 'italic' }}>{restaurant.location.address1}, {restaurant.location.city}  {restaurant.location.zip_code}</p>
 
                                 <StarRating rating={restaurant.rating} />
                                 <LikeButton

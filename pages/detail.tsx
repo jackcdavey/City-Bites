@@ -71,13 +71,18 @@ const Detail = () => {
 
         return (
             <>
-
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : restaurant ? (
                     <>
-                        <div className={styles.detail}>
-                            <div className={styles.card} style={{ backgroundImage: `url(${restaurant.image_url})` }}>
+                        <div className={styles.detail} >
+                            <div
+                                className={styles.card}
+                                style={{
+                                    backgroundImage: `url(${restaurant.image_url})`,
+                                    boxShadow: liked ? '0 0 3rem green' : 'none',
+                                }}
+                            >
                             </div>
                             <div style={{
                                 display: 'flex',
@@ -86,7 +91,6 @@ const Detail = () => {
                             }}>
                                 <h1>{restaurant.name}</h1>
                                 <h3>{restaurant.categories[0].title}</h3>
-                                {/* <p>{restaurant.location.display_address}</p> */}
                                 <p>{restaurant.location.address1}, {restaurant.location.city}  {restaurant.location.zip_code}</p>
 
                                 <StarRating rating={restaurant.rating} />

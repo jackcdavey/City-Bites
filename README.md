@@ -1,34 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# City Bites
 
-First, run the development server:
+A web application for viewing restaurants by city using the Yelp Fusion API, with user 'likes' stored using Vercel Postgres
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Technologies Used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+• **Next.js**: A React framework for server-rendered applications.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+• **Vercel Postgres**: Used for storing users' likes.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+• **Yelp Fusion API** Used to fetch restaurant data
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Setup and Installation
+#### Before starting, you should have Node.JS, NPM, and Homebrew (if MacOs) installed. 
 
-## Learn More
+### 1. Clone the Repo
+Use either the GitHub web GUI or the CLI with `gh repo clone jackcdavey/City-Bites` to locally save the repo, and unzip in your development location.
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Install Dependencies
+Using the command line to navigate into the project folder, run `npm install` to download and install all necessary dependencies for the project.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Environment Variables
+Set up the necessary environment variables in a .env.local file:
+`YELP_API_KEY=your_yelp_api_key_here`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 4. Database Setup
+For storage of liked restaurants, follow [this](https://vercel.com/docs/storage/vercel-postgres/quickstart) guide to setup a Vercel Postgres database and import corresponding variables.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 5. Run the Project
+From the project root directory, run `npm run dev` to start the website on port 3000. If a browser window does not automatically open, you can view the site at `localhost:3000`

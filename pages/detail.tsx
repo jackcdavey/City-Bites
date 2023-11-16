@@ -16,7 +16,7 @@ const Detail = () => {
         reviews: [],
     });
 
-
+    //Get restaurant details from Yelp API, check if user has liked this restaurant
     const fetchData = async () => {
         if (!restaurantId) return;
 
@@ -55,7 +55,7 @@ const Detail = () => {
         <div className={styles.container}>
             <Head>
                 <title>{restaurant ? restaurant.name : 'Restaurant Details'}</title>
-                <meta name="description" content="A list of top restaurants in your city" />
+                <meta name='description' content={'Details for a specific restaurant'} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>

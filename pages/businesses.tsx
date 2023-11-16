@@ -14,6 +14,7 @@ export default function Businesses() {
         data: [],
     });
 
+    //Get restaurants from Yelp API, check if user has liked each restaurant
     useEffect(() => {
         async function fetchData() {
             if (!city) return;
